@@ -12,10 +12,10 @@ def login_user(request):
         user = authenticate(request, username=username, password=password)
 
         if user:
-            login(request)
+            login(request, user=user)
             return redirect('home')
         
-    return redirect('login')
+    return render(request, 'login.html')
 
 
 def register_user(request):
@@ -25,9 +25,9 @@ def register_user(request):
         password1 = request.POST.get('password1')
         password2 = request.POST.get('password2')
 
-        if not User.objects.filter(email=email).exists():
+        if User.objects.filter(email=email).exists():
              return redirect('register')
-        elif not User.objects.filter(username=username).exists():
+        elif User.objects.filter(username=username).exists():
              return redirect('register')
         elif password1 != password2:
             return redirect('register')
@@ -39,7 +39,7 @@ def register_user(request):
 
             return redirect('login')
         
-    return redirect('register')
+    return render(request, 'register.html')
 
 
 def logout_user(request):
